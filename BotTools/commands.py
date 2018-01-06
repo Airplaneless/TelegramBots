@@ -1,6 +1,8 @@
 import random
 import os
 import pandas as pd
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pylab as plt
 from pandas_datareader import DataReader
 from BotTools.config import *
