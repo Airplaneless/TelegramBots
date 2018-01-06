@@ -100,13 +100,12 @@ class Stocks:
         :param path: str
         Path for saved image
         """
-        fig = plt.figure(figsize=(10, 10))
-
         kfv = lambda d, v: d.keys()[d.values().index(v)]
 
         idx = kfv(self.stock_list['Ticker'].to_dict(), ticker)
         info = self.stock_list.loc[idx]
 
+        plt.figure(figsize=(10, 10))
         ax1 = plt.subplot2grid((3, 3), (0, 0), colspan=3, rowspan=2)
         ax1.set_title(info['Name'] + '\n' + info['Ticker'] + ', ' + info['Exchange'] + '\nYahooFinance, 2018')
         ax1.plot(data['Open'], label='Open')
