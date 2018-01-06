@@ -76,11 +76,15 @@ class Stocks:
             return None
 
     @staticmethod
-    def print_series(series):
-        if len(series) > 18:
-            return str(series[:18])
-        else:
-            return str(series)
+    def print_results(df):
+        ans = ''
+        for i in range(len(df[:10])):
+            ans += 'Name: ' + str(df.iloc[i]['Name']) + '\n'
+            ans += 'Ticker: ' + str(df.iloc[i]['Ticker']) + '\n'
+            ans += 'Exchange: ' + str(df.iloc[i]['Exchange']) + '\n'
+            ans += 'Category: ' + str(df.iloc[i]['Category Name']) + '\n'
+            ans += 'Download data: /load_{}'.format(str(df.index[i])) + '\n\n'
+        return ans
 
     @staticmethod
     def data_frame2png(df, path):

@@ -28,12 +28,14 @@ class Interface:
             format='%(asctime)s %(message)s'
         )
 
+        self.stock_updater = Stocks(os.path.join(ROOT, 'data/yahoo'))
+        self.quoter = Quotes(os.path.join(ROOT, 'data/Havamal.csv'))
+
     @staticmethod
     def start(bot, update):
         user = update.message.from_user
         logging.info('Saying hi to {}'.format(usr2str(user)))
-        bot.send_message(chat_id=update.message.chat_id, text="Send stock index, which you wish find\n"
-                                                              "To get stock data, send /get + #INDEX_NAME#\n")
+        bot.send_message(chat_id=update.message.chat_id, text="Send stock index, which you wish find")
 
     @staticmethod
     def echo(bot, update):
@@ -41,56 +43,49 @@ class Interface:
         logging.info("Repeat after user {}, text: u'{}'".format(usr2str(user), update.message.text))
         bot.send_message(chat_id=update.message.chat_id, text=update.message.text)
 
-    @staticmethod
-    def rand_quote(bot, update):
+    def rand_quote(self, bot, update):
         user = update.message.from_user
-        quoter = Quotes(
-            os.path.join(ROOT, 'data/Havamal_quotes.csv')
-        )
         logging.info('Sending quotation for {}'.format(usr2str(user)))
-        bot.send_message(chat_id=update.message.chat_id, text=quoter.random_quote())
+        bot.send_message(chat_id=update.message.chat_id, text=self.quoter.random_quote())
 
-    @staticmethod
-    def search_stock(bot, update):
+    def search_stock(self, bot, update):
         user = update.message.from_user
-        stack_updater = Stocks(
-            os.path.join(ROOT, 'data/yahoo')
-        )
         request = update.message.text
         logging.info('{} request search'.format(usr2str(user)))
         logging.info('Searching for {} stock info'.format(request))
-        match = stack_updater.find_match(request)
+        match = self.stock_updater.find_match(request)
         if match is None:
             logging.warning("Couldn't  find {} stock info".format(request))
             bot.send_message(chat_id=update.message.chat_id, text="Can't find that")
         else:
             logging.info("{} stock info founded".format(request))
-            Stocks.data_frame2png(match[:19], os.path.join(ROOT, 'workspace/stocks/table.html'))
+            #Stocks.data_frame2png(match[:19], os.path.join(ROOT, 'workspace/stocks/table.html'))
             bot.send_message(chat_id=update.message.chat_id, text="For your request I found:")
-            bot.send_photo(
+            bot.send_message(
                 chat_id=update.message.chat_id,
-                photo=open(os.path.join(ROOT, 'workspace/stocks/table.png'), 'rb')
+                text=Stocks.print_results(match[:19])
             )
 
-    @staticmethod
-    def get_stock(bot, update, args):
+    def get_stock(self, bot, update):
         user = update.message.from_user
-        stock_updater = Stocks(
-            os.path.join(ROOT, 'data/yahoo')
-        )
-        request = " ".join(args)
+        request = int(update.message.text.split('_')[-1])
+        ticker = self.stock_updater.stock_list.iloc[request]['Ticker']
         logging.info("{} request load data".format(usr2str(user)))
         bot.send_message(chat_id=update.message.chat_id, text="Loading data, wait a minute")
-        logging.info("Loading stock data for {}".format(request))
-        data = stock_updater.get_stock_data(request)
+        logging.info("Loading stock data for {}".format(ticker))
+        data = self.stock_updater.get_stock_data(ticker)
         if data is None:
-            logging.warning("Couldn't  load {} stock data".format(request))
-            bot.send_message(chat_id=update.message.chat_id, text="There is no {} index".format(request))
+            logging.warning("Couldn't  load {} stock data".format(ticker))
+            bot.send_message(chat_id=update.message.chat_id, text="There is no {} index".format(ticker))
         else:
-            logging.info("Got {} stock data, plotting...".format(request))
-            stock_updater.plot_data(data, request, os.path.join(ROOT, 'workspace/stocks/stocks.png'))
+            logging.info("Got {} stock data, plotting...".format(ticker))
+            self.stock_updater.plot_data(data, ticker, os.path.join(ROOT, 'workspace/stocks/stocks.png'))
             logging.info("Finish plotting, sending photo")
             bot.send_photo(
                 chat_id=update.message.chat_id,
                 photo=open(os.path.join(ROOT, 'workspace/stocks/stocks.png'), 'rb')
             )
+
+    @staticmethod
+    def func_builder(f, args):
+        return f(args=args)

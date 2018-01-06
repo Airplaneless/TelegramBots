@@ -40,7 +40,7 @@ class StockTest(unittest.TestCase):
         )
 
         match = updater.find_match('IBM')
-        rec = Stocks.print_series(match)
+        rec = Stocks.print_results(match)
         self.assertIs(bool(rec), True)
         print rec
 

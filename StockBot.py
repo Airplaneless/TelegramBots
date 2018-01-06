@@ -13,11 +13,12 @@ if __name__ == '__main__':
     updater = Updater(__token__)
     dispatcher = updater.dispatcher
 
-    Interface()
+    interface = Interface()
+    ls = ['load_' + str(i) for i in range(len(interface.stock_updater.stock_list)+1)]
 
-    start_handler = CommandHandler('start', Interface.start)
-    find_stocks = MessageHandler(Filters.text, Interface.search_stock)
-    load_stocks = CommandHandler('get', Interface.get_stock, pass_args=True)
+    start_handler = CommandHandler('start', interface.start)
+    find_stocks = MessageHandler(Filters.text, interface.search_stock)
+    load_stocks = CommandHandler(ls, interface.get_stock)
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(load_stocks)
