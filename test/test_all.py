@@ -5,7 +5,7 @@ from BotTools import Quotes, Stocks
 ROOT = os.path.abspath("../")
 
 
-class RandomQuoteTest(unittest.TestCase):
+class QuoteTest(unittest.TestCase):
 
     def test(self):
         quoter = Quotes(
@@ -50,7 +50,7 @@ class StockTest(unittest.TestCase):
         )
 
         match = updater.find_match('Microsoft')
-        res = Stocks.data_frame2png(match[:9], os.path.join(ROOT, 'workspace/stocks/test.html'))
+        res = Stocks.data_frame2png(match[:19], os.path.join(ROOT, 'workspace/stocks/table.html'))
         self.assertIs(res, True)
 
     def test_plot(self):
@@ -61,5 +61,5 @@ class StockTest(unittest.TestCase):
         data = updater.get_stock_data('IBM')
 
         self.assertIs(
-            Stocks.plot_data(data, 'IBM', os.path.join(ROOT, 'workspace/stocks/stocks.png')), True
+            updater.plot_data(data, 'IBM', os.path.join(ROOT, 'workspace/stocks/stocks.png')), True
         )

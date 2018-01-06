@@ -88,8 +88,7 @@ class Stocks:
         os.system("cutycapt --url=file://{} --out={}".format(path, path[:-5]+'.png'))
         return True
 
-    @staticmethod
-    def plot_data(data, ticker, path):
+    def plot_data(self, data, ticker, path):
         """
         Plot and save stock data
         :param data: pd.DataFrame
@@ -99,9 +98,19 @@ class Stocks:
         """
         fig = plt.figure(figsize=(10, 10))
 
+        kfv = lambda d, v: d.keys()[d.values().index(v)]
+
+        idx = kfv(self.stock_list['Ticker'].to_dict(), ticker)
+        info = self.stock_list.loc[idx]
+
         ax1 = plt.subplot2grid((3, 3), (0, 0), colspan=3, rowspan=2)
-        ax1.set_title('{} stock data'.format(ticker) + '\nYahooFinance, 2018')
+        ax1.set_title(info['Name'] + '\n' + info['Ticker'] + ', ' + info['Exchange'] + '\nYahooFinance, 2018')
         ax1.plot(data['Open'], label='Open')
+        ax1.plot(data['High'], label='High')
+        ax1.plot(data['Low'], label='Low')
+        ax1.plot(data['Close'], label='Close')
+        ax1.plot(data['Adj Close'], label='Adj Close')
+        ax1.legend()
         ax1.set_ylabel('Currency in USD')
 
         ax2 = plt.subplot2grid((3, 3), (2, 0), colspan=3)
