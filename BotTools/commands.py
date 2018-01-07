@@ -72,10 +72,7 @@ class Stocks:
         Name of ticker
         :return: pd.DataFrame
         """
-        if self.find_match(ticker, column='Ticker') is not None:
-            return DataReader(ticker, self.name)
-        else:
-            return None
+        return DataReader(ticker, self.name)
 
     @staticmethod
     def print_results(df):

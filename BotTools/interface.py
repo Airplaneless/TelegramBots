@@ -1,5 +1,6 @@
 import logging
 import datetime
+from pandas_datareader._utils import RemoteDataError
 from commands import Stocks, Quotes
 from config import *
 
@@ -73,11 +74,8 @@ class Interface:
         logging.info("{} request load data".format(usr2str(user)))
         bot.send_message(chat_id=update.message.chat_id, text="Loading data, wait a minute")
         logging.info("Loading stock data for {}".format(ticker))
-        data = self.stock_updater.get_stock_data(ticker)
-        if data is None:
-            logging.warning("Couldn't  load {} stock data".format(ticker))
-            bot.send_message(chat_id=update.message.chat_id, text="There is no {} index".format(ticker))
-        else:
+        try:
+            data = self.stock_updater.get_stock_data(ticker)
             logging.info("Got {} stock data, plotting...".format(ticker))
             self.stock_updater.plot_data(data, ticker, os.path.join(ROOT, 'workspace/stocks/stocks.png'))
             logging.info("Finish plotting, sending photo")
@@ -85,7 +83,9 @@ class Interface:
                 chat_id=update.message.chat_id,
                 photo=open(os.path.join(ROOT, 'workspace/stocks/stocks.png'), 'rb')
             )
-
-    @staticmethod
-    def func_builder(f, args):
-        return f(args=args)
+        except RemoteDataError:
+            logging.warning("Error: Can't load data for {}".format(ticker))
+            bot.send_message(
+                chat_id=update.message.chat_id,
+                text="Error: Unable get data from finance.yahoo.com for {}".format(ticker)
+            )
