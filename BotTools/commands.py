@@ -1,13 +1,16 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import random
 import os
 import pandas as pd
+import linecache
+import difflib
 import matplotlib as mpl
 mpl.use('Agg')
 import matplotlib.pylab as plt
 from pandas_datareader import DataReader
 from PIL import Image, ImageOps
 from BotTools.config import *
-
 
 def invert_image(image):
     if image.mode == 'RGBA':
@@ -144,3 +147,39 @@ class Stocks:
         new_image.save(path)
 
         return True
+
+
+class Dictionary:
+    """
+    Work with dz dicts
+    """
+    def __init__(self, path):
+        self.path = path
+        self.text = linecache.getlines(path)
+        self.indexes = dict()
+
+        for i in xrange(len(self.text)):
+            if self.text[i][0] in {' ', '/'} or i < 20:
+                pass
+            else:
+                self.indexes[self.text[i][:-1]] = i
+
+    def get_translate(self, index):
+        translation = self.text[index]
+        index += 1
+        while True:
+            if self.text[index][0] in {' ', "\n"}:
+                translation += self.text[index].replace('_', '')
+                index += 1
+            else:
+                return "".join(translation)
+
+    def search_word(self, word):
+        res = difflib.get_close_matches(word.lower(), self.indexes.keys(), n=8)
+        ans = 'Схожие слова:\n'
+        if bool(res):
+            for i in res:
+                ans += i + ': /get_{}'.format(self.indexes[i]) + '\n\n'
+        else:
+            ans = None
+        return ans

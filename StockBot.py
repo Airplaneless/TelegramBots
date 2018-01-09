@@ -1,12 +1,9 @@
-import sys
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 from BotTools import Interface
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 if __name__ == '__main__':
-
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
-
 
     with open('token_StockBot', mode='r') as f:
         __token__ = f.readline()
@@ -14,7 +11,8 @@ if __name__ == '__main__':
     updater = Updater(__token__)
     dispatcher = updater.dispatcher
 
-    interface = Interface()
+    interface = Interface('StockBot')
+
     ls = ['load_' + str(i) for i in range(len(interface.stock_updater.stock_list)+1)]
 
     start_handler = CommandHandler('start', interface.start)

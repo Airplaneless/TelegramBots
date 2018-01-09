@@ -1,6 +1,8 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 import unittest
 import os
-from BotTools import Quotes, Stocks
+from BotTools import Quotes, Stocks, Dictionary
 
 ROOT = os.path.abspath("../")
 
@@ -63,3 +65,18 @@ class StockTest(unittest.TestCase):
         self.assertIs(
             updater.plot_data(data, 'IBM', os.path.join(ROOT, 'workspace/stocks/stocks.png')), True
         )
+
+
+class DictTest(unittest.TestCase):
+
+    def test_search(self):
+        dictionary = Dictionary(os.path.join(ROOT, 'data/dicts/MullerDict.dz'))
+        ans = dictionary.search_word('dog')
+        print ans
+        self.assertEqual(bool(ans), True)
+
+    def test_get(self):
+        dictionary = Dictionary(os.path.join(ROOT, 'data/dicts/MullerDict.dz'))
+        ans = dictionary.get_translate(dictionary.indexes['dog'])
+        print ans
+        self.assertEqual(bool(ans), True)
