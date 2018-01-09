@@ -48,7 +48,7 @@ class Interface:
         bot.send_message(chat_id=update.message.chat_id, text="Введите английское слово для перевода")
 
     @staticmethod
-    def about_dict(self, bot, update):
+    def about_dict(bot, update):
         user = update.message.from_user
         logging.info('{} request about info'.format(usr2str(user)))
         bot.send_message(
