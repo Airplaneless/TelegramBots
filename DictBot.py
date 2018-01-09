@@ -22,6 +22,7 @@ if __name__ == '__main__':
 
     dispatcher.add_handler(start_handler)
     dispatcher.add_handler(print_translate)
+    dispatcher.add_handler(about)
     dispatcher.add_handler(find_word)
 
     updater.start_polling()
