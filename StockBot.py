@@ -1,4 +1,5 @@
 import sys
+import matplotlib as mpl
 from BotTools import Interface
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
@@ -6,6 +7,7 @@ if __name__ == '__main__':
 
     reload(sys)
     sys.setdefaultencoding('utf-8')
+    mpl.use('Agg')
 
     with open('token_StockBot', mode='r') as f:
         __token__ = f.readline()

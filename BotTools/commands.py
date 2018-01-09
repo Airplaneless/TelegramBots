@@ -1,12 +1,27 @@
 import random
-import os
 import pandas as pd
-import matplotlib as mpl
-mpl.use('Agg')
 import matplotlib.pylab as plt
 from pandas_datareader import DataReader
+from PIL import Image, ImageOps
 from BotTools.config import *
 
+
+def invert_image(image):
+    if image.mode == 'RGBA':
+        r,g,b,a = image.split()
+        rgb_image = Image.merge('RGB', (r,g,b))
+
+        inverted_image = ImageOps.invert(rgb_image)
+
+        r2,g2,b2 = inverted_image.split()
+
+        final_transparent_image = Image.merge('RGBA', (r2,g2,b2,a))
+
+        return final_transparent_image
+
+    else:
+        inverted_image = ImageOps.invert(image)
+        return inverted_image
 
 class Quotes:
     """
@@ -119,4 +134,7 @@ class Stocks:
         ax2.plot(data['Volume'], label='Volume')
         ax2.set_ylabel('Volume, USD')
         plt.savefig(path)
+        image = Image.open(path)
+        new_image = invert_image(image)
+        new_image.save(path)
         return True
