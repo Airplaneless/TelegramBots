@@ -166,11 +166,13 @@ class Dictionary:
 
     def get_translate(self, index):
         translation = self.text[index]
-        index += 1
+        idx = index + 1
         while True:
-            if self.text[index][0] in {' ', "\n"}:
-                translation += self.text[index].replace('_', '')
-                index += 1
+            if idx - index > 70:
+                return "".join(translation)
+            if self.text[idx][0] in {' ', '\n'}:
+                translation += self.text[idx].replace('_', '')
+                idx += 1
             else:
                 return "".join(translation)
 

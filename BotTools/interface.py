@@ -131,10 +131,15 @@ class Interface:
         user = update.message.from_user
         request = update.message.text
         logging.info('{} search for {}'.format(usr2str(user), request))
-        results = self.dictionary.search_word(request)
-        if results is None:
-            logging.info('Can not find {}'.format(request))
-            bot.send_message(chat_id=update.message.chat_id, text='Нет похожих слов в словаре')
-        else:
+        if request in self.dictionary.indexes:
             logging.info('Send results')
-            bot.send_message(chat_id=update.message.chat_id, text=results)
+            translate = self.dictionary.get_translate(
+                self.dictionary.indexes[request]
+            )
+            bot.send_message(chat_id=update.message.chat_id, text=translate)
+        else:
+            bot.send_message(chat_id=update.message.chat_id, text='Нет такого слова в словаре')
+            logging.info('{} is not in dictionary'.format(request))
+            advert = self.dictionary.search_word(request)
+            if advert is not None:
+                bot.send_message(chat_id=update.message.chat_id, text=advert)

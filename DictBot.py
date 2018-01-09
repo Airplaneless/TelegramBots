@@ -14,7 +14,7 @@ if __name__ == '__main__':
     interface = Interface('DictBot')
 
     ls = ['get_' + str(i) for i in interface.dictionary.indexes.values()]
-    print ls[-1]
+
     start_handler = CommandHandler('start', interface.start_dictbot)
     print_translate = CommandHandler(ls, interface.translate)
     about = CommandHandler('about', interface.about_dict)
