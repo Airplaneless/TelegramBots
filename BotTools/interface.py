@@ -131,10 +131,10 @@ class Interface:
         user = update.message.from_user
         request = update.message.text
         logging.info('{} search for {}'.format(usr2str(user), request))
-        if request in self.dictionary.indexes:
+        if request.lower() in self.dictionary.indexes:
             logging.info('Send results')
             translate = self.dictionary.get_translate(
-                self.dictionary.indexes[request]
+                self.dictionary.indexes[request.lower()]
             )
             bot.send_message(chat_id=update.message.chat_id, text=translate)
         else:
