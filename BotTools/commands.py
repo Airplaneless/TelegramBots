@@ -1,4 +1,5 @@
 import random
+import os
 import pandas as pd
 import matplotlib as mpl
 mpl.use('Agg')
@@ -24,6 +25,7 @@ def invert_image(image):
     else:
         inverted_image = ImageOps.invert(image)
         return inverted_image
+
 
 class Quotes:
     """
@@ -136,7 +138,9 @@ class Stocks:
         ax2.plot(data['Volume'], label='Volume')
         ax2.set_ylabel('Volume, USD')
         plt.savefig(path)
+
         image = Image.open(path)
         new_image = invert_image(image)
         new_image.save(path)
+
         return True
