@@ -7,5 +7,4 @@ Require:
     pandas
     matplotplib
     pandas-datareader
-    cutycapt
     
