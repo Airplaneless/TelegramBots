@@ -1,5 +1,7 @@
 import random
 import pandas as pd
+import matplotlib as mpl
+mpl.use('Agg')
 import matplotlib.pylab as plt
 from pandas_datareader import DataReader
 from PIL import Image, ImageOps
