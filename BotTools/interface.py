@@ -38,7 +38,7 @@ class Interface:
     def start(bot, update):
         user = update.message.from_user
         logging.info('Saying hi to {}'.format(usr2str(user)))
-        bot.send_message(chat_id=update.message.chat_id, text="Send stock name, which you wish find")
+        bot.send_message(chat_id=update.message.chat_id, text=u"Send stock name, which you wish find")
 
     @staticmethod
     def start_dictbot(bot, update):

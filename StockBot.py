@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+import sys
+reload(sys)
+sys.setdefaultencoding('utf8')
 from BotTools import Interface
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
