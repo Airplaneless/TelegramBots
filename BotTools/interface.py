@@ -8,11 +8,10 @@ from config import *
 
 
 def usr2str(usr):
-    return "{} {} ({}, {})".format(
+    return "{} {} ({})".format(
         usr['first_name'],
         usr['last_name'],
-        usr['username'],
-        usr['id']
+        usr['username']
     )
 
 
