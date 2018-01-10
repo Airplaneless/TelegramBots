@@ -104,7 +104,7 @@ class Stocks:
             ans += 'Ticker: ' + str(df.iloc[i]['Ticker']) + '\n'
             ans += 'Exchange: ' + str(df.iloc[i]['Exchange']) + '\n'
             ans += 'Category: ' + str(df.iloc[i]['Category Name']) + '\n'
-            ans += 'Download data: /load_{}'.format(str(df.index[i])) + '\n\n'
+            ans += 'Plot data: /load_{}'.format(str(df.index[i])) + '\n\n'
         return ans
 
     @staticmethod
