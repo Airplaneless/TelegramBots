@@ -178,7 +178,7 @@ class Dictionary:
 
     def search_word(self, word):
         res = difflib.get_close_matches(word.lower(), self.indexes.keys(), n=8)
-        ans = 'Схожие слова:\n'
+        ans = 'Похожие слова:\n'
         if bool(res):
             for i in res:
                 ans += i + ': /get_{}'.format(self.indexes[i]) + '\n\n'
